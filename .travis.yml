@@ -1,0 +1,20 @@
+language: java
+env:
+  - PLAY_BRANCH=lab
+before_install:
+  - git clone --depth=1 -b ${PLAY_BRANCH} https://github.com/dmitrie/play.git play-${PLAY_BRANCH}
+  - cd play-${PLAY_BRANCH}/framework
+  - time ant
+  - cd ${TRAVIS_BUILD_DIR}
+install: play-${PLAY_BRANCH}/play dependencies --sync
+script: play-${PLAY_BRANCH}/play build-module
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: hkNA/YZRl68ZeU4yp+nxvw1kFK0NpovHagu5rWDTdmueWp50hTDdKn3g7NGh5/QB0HOonf9ADgs776rHmTecJgGkLc87Ku6JH9K7Lnhd0p3cZvsk/iLrkEfYaQHar4vE3ywjq1GteNZRnAa3NoeiyyFQ45keYEL3gsA0zAMEvAEhD3zrtzPUUqK112qIVP52YQ569KuryBSItc7yecc2YzGy37BirLvBLHADQxDs03piyujxNGNJH6ESeUv+wAoOhUY946HadZ4zsL5zZsbfO9MgT3iEaJ9H/8B9ZxU3ugag/McRqGK50qQYeIrCjw4NMtxGgo204cZAkZbuWgpNmZDm8ZMeJ/r5sYVtxqclZ7rZLPVl5XbPSMCm3lgsvKUwour8etvv+biwy+reLCkyE9XMmnSRVBJmZb7SoXpWl4SDNBLiVY1LhZpzo06HTZcPror44eddW6Odd9jZt/I9nkH+zwpRVcfqvINU+IFabbZLVp3+15ZcEXk5pEN4aTxijiO2Uew1CNvz7WrtptjKoXDg0H9y/C1VSAy89XrMplWlonm8OzxEVOgZeoYAcC8ILHcSVI9xGgLv8Dxr9UzLaP67uz3PVee7ltjMIJS3H6/WwQdUjrNS2iK2ydX6P+nCPknWgSgdQUrKgb2jcQix8mHWZ8IiN1/SG3x39vBVRmg=
+  file_glob: true
+  file: dist/*.zip
+  on:
+    tags: true
+    repo: dmitrie/play-tests
